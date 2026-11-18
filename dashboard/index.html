@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="page" id="app" aria-busy="true">
+  <header class="masthead">
+    <div class="brand">
+      <span class="radar-dot" aria-hidden="true"></span>
+      <div>
+        <p class="brand-name">Token Radar</p>
+        <p class="brand-sub">Pre-token protocols, ranked by implied value</p>
+      </div>
+    </div>
+    <dl class="mast-meta">
+      <div><dt>Snapshot</dt><dd id="meta-asof">—</dd></div>
+      <div><dt>Model</dt><dd>tide-1</dd></div>
+      <div><dt>Rows</dt><dd id="meta-rows">—</dd></div>
+    </dl>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <h1>Which launch is worth farming next?</h1>
+      <p>Every protocol below recorded no token at the snapshot. The radar scores each
+      one from its own figures — TVL, seven-day growth, how long it has run with no
+      token, and how many chains it spans — and ranks the 200 strongest. Pick a row
+      to see the maths and the six steps to farm it.</p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section class="toolbar" aria-label="Board controls">
+    <div class="control">
+      <label for="q">Search</label>
+      <input id="q" type="search" placeholder="Name, category or chain" autocomplete="off">
+    </div>
+    <div class="control">
+      <label for="category">Category</label>
+      <select id="category"><option value="all">All categories</option></select>
+    </div>
+    <div class="control">
+      <label for="chain">Chain</label>
+      <select id="chain"><option value="all">All chains</option></select>
+    </div>
+    <label class="check"><input type="checkbox" id="watchlist-only"> Watchlist only</label>
+    <div class="tabs" role="tablist" aria-label="Token status">
+      <button type="button" id="tab-pre" role="tab" aria-selected="true">Pre-token</button>
+      <button type="button" id="tab-live" role="tab" aria-selected="false">Live token</button>
+    </div>
+    <p class="count" id="count" aria-live="polite"></p>
+  </section>
+
+  <div class="layout">
+    <section class="board-panel" aria-label="Ranked board">
+      <div class="table-scroll">
+        <table id="board">
+          <caption>Pre-token protocols, strongest implied value first. Select a row for its model and farm plan.</caption>
+          <thead>
+            <tr>
+              <th scope="col"><button type="button" data-sort="rank">Rank</button></th>
+              <th scope="col"><button type="button" data-sort="name">Protocol</button></th>
+              <th scope="col"><button type="button" data-sort="tvl">TVL</button></th>
+              <th scope="col"><button type="button" data-sort="growth">7d</button></th>
+              <th scope="col"><button type="button" data-sort="age">Age</button></th>
+              <th scope="col"><button type="button" data-sort="implied">Implied value</button></th>
+              <th scope="col">Token</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="empty" hidden>No protocol matches that filter. Clear the search or pick another category.</p>
+    </section>
+
+    <aside class="detail" id="detail" aria-label="Protocol detail">
+      <p class="detail-hint">Select a protocol on the board to see its model breakdown and farm plan.</p>
+    </aside>
+  </div>
+
+  <section class="model" aria-label="How implied value is computed">
+    <h2>How implied value is computed</h2>
+    <p class="formula">implied = round( tvl_usd × 0.20 × (1 + clamp(change_7d, −50, 100) / 100 × 0.70) × (0.55 + min(age_days, 1460) / 1460 × 0.45) × (1 + 0.04 × min(chains, 5)) )</p>
+    <p>TVL is the size of the record so far; seven-day growth is its direction; tenure
+    is how long the protocol has run with no token (unknown age counts as 180 days);
+    breadth is how many chains the record spans. The same function scores every row
+    and no name is special-cased. Whole-dollar ties are written one dollar apart so
+    the board is strictly decreasing from rank 1 to rank 200. Live-token protocols
+    are set aside with their market caps — the market's own number, never a model
+    number. An implied value is a model, not a price and not a promise of a token.</p>
+  </section>
+
+  <footer class="foot">
+    <p>Token Radar — built for the make.fun token-radar-01 bounty. Data: the sealed
+    snapshot, one fetch of the public protocol index. No network is used by this page.</p>
+  </footer>
+</div>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
